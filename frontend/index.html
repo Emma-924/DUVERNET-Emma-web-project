@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Blue Jays Roster Showcase 2025</title>
+    <link rel="stylesheet" href="CSS/style.css" />
+</head>
+<body>
+<header class="main-header">
+    <h1>Toronto Blue Jays Roster Showcase</h1><br>
+    <h2>Discover the 2025 Toronto Blue Jays players</h2>
+</header>
+
+<main id="app" class="container">
+    <section class="card" v-if="items.length">
+        <div class="media">
+            <div class="season-tag">Season 2025 • Toronto Blue Jays</div>
+            <img :src="currentItem.img" :alt="currentItem.title" class="thumb" />
+        </div>
+
+        <div class="content">
+            <h2 class="app-title">BLUE JAYS PLAYERS</h2>
+
+            <div class="item-display" @click="toggleShow" role="button" tabindex="0"
+                 @keyup.enter="toggleShow" @keyup.space.prevent="toggleShow">
+                <h3 v-if="showTitle" class="item-title">{{ currentItem.title }}</h3>
+                <p v-else class="item-desc">{{ currentItem.desc }}</p>
+                <p class="club-name">Toronto Blue Jays • 2025</p>
+                <span class="hint">Click to toggle name/details</span>
+            </div>
+
+            <div class="controls" aria-label="Navigation">
+                <button @click="prevItem" :disabled="currentIndex === 0">Previous Player</button>
+                <button @click="nextItem" :disabled="currentIndex === items.length - 1">Next Player</button>
+            </div>
+
+            <div class="pager">Player {{ currentIndex + 1 }} / {{ items.length }}</div>
+            <p class="extra-note">Browse through the Blue Jays roster and click to reveal each player’s profile.</p>
+        </div>
+    </section>
+
+    <section v-else class="empty">
+        <p>No players loaded. Check your Blue Jays data file.</p>
+    </section>
+</main>
+
+<footer class="footer">Made by Emma.D</footer>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="data/script.js"></script>
+
+<script>
+    const { createApp } = Vue;
+    createApp({
+        data() {
+            return {
+                items: window.items || [],
+                currentIndex: 0,
+                showTitle: true
+            };
+        },
+        computed: {
+            currentItem() {
+                return this.items[this.currentIndex] || { title: '', desc: '', img: '' };
+            }
+        },
+        methods: {
+            toggleShow() {
+                this.showTitle = !this.showTitle;
+            },
+            nextItem() {
+                if (this.currentIndex < this.items.length - 1) {
+                    this.currentIndex++;
+                    this.showTitle = true;
+                }
+            },
+            prevItem() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.showTitle = true;
+                }
+            }
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
